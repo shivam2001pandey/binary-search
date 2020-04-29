@@ -1,0 +1,66 @@
+#include <iostream>
+using namespace std;
+
+bool canAlloc(long long bpage[],long long books,long long std,long long mid)
+{
+    long long curPage=0;
+    int students=1;
+    for(int i=0;i<books;i++)
+    {
+        if(curPage+bpage[i]>mid)
+        {
+            students++;
+            curPage=bpage[i];
+            if(students>std)
+                return false;
+        }
+        else
+            curPage+=bpage[i];
+    }
+    return true;
+}
+
+long long bisearch(long long bpage[],long long books,long long std)
+{   
+    long long sumPage=0;
+    long long ans;
+    long long lb=0,ub=0;
+    if(books<std)   return -1;
+    for(int i=0;i<books;i++)
+        {
+            sumPage+=bpage[i];
+            lb=max(lb,bpage[i]);
+        }
+    ans=lb;    
+    ub=sumPage;
+    while(lb<=ub)
+    {
+        long long mid=(lb+ub)/2;
+        if(canAlloc(bpage,books,std,mid))
+        {
+            ans=mid;
+            ub=mid-1;
+        }
+        else
+            lb=mid+1;
+    }
+    return ans;
+}
+
+int main() {
+	//code
+	int test;
+	cin>>test;
+	while(test--)
+	{
+	    long long books;
+	    cin>>books;
+	    long long bpage[books];
+	    for(int i=0;i<books;i++)
+	        cin>>bpage[i];
+	    long long std;
+	    cin>>std;
+	    cout<<bisearch(bpage,books,std)<<endl;
+	}
+	return 0;
+}
